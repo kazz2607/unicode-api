@@ -1,0 +1,14 @@
+Các cách test API
+
+- Phần mềm PostMan
+- Extension Visual Studio Code 
+- Sử dụng test Online
+
+Xây dựng CRUD API
+
+- GET :     /users => Lấy tất cả tài nguyên
+- GET :     /users/id => Lấy một tài nguyên theo ID
+- POST :    /users => Thêm mới tài nguyên
+- PUT :     /users/id => Cập nhật tất cả các trường của 1 tài nguyên
+- PATCH :   /users/id => Cập nhật 1 vài trường của 1 tài nguyên
+- DELETE :  /users/id => Xoá 1 tài nguyên
