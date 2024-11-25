@@ -21,9 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('users')->name('users.')->group(function(){
     Route::get('/',[UserController::class,'index'])->name('index');
-    Route::get('/{id}',[UserController::class,'detail'])->name('detail');
+    Route::get('/{user}',[UserController::class,'detail'])->name('detail');
     Route::post('/',[UserController::class,'create'])->name('create');
-    Route::put('/{id}',[UserController::class,'update'])->name('update-put');
-    Route::patch('/{id}',[UserController::class,'update'])->name('update-patch');
-    Route::delete('/{id}',[UserController::class,'delete'])->name('delete');
+    Route::put('/{user}',[UserController::class,'update'])->name('update-put');
+    Route::patch('/{user}',[UserController::class,'update'])->name('update-patch');
+    Route::delete('/{user}',[UserController::class,'delete'])->name('delete');
 });
