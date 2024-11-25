@@ -10,12 +10,46 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index(){
-        return 'All users';
+    public function index(Request $request){
+
+        $where = [];
+        if ($request->name){
+            $where[] = ['name','like','%'.$request->name.'%'];
+        }
+        if ($request->email){
+            $where[] = ['email','like','%'.$request->email.'%'];
+        }
+        $user = User::orderBy('id','desc');
+        if (!empty($where)){
+            $user = $user->where($where);
+        }
+        $user = $user->get();
+
+        if ($user->count()> 0){
+            $response = [
+                'status' => 'success',
+                'data' => $user
+            ];
+        }else{
+            $response = [
+                'status' => 'no_data',
+            ];
+        }
+        return $response;
     }
 
-    public function detail(User $user){
-        return 'User ID :'.$user->id;
+    public function detail($id){
+        $user = User::find($id);
+        if (!$user){
+            $status = 'no_data';
+        }else{
+            $status = 'success';
+        }
+        $response = [
+            'status' => $status,
+            'data' => $user
+        ];
+        return $response;
     }
 
     public function create(Request $request){
@@ -42,7 +76,7 @@ class UserController extends Controller
         if ($user->id){
             $response = [
                 'status' => 'success',
-                'date' => $user
+                'data' => $user
             ];
         }else{
             $response = [
