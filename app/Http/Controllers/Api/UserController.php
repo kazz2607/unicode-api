@@ -117,9 +117,25 @@ class UserController extends Controller
         return $response;
     }
 
-    public function delete(User $user){
-        
-        return 'Delete User ID :'.$user->id;
+    public function delete($id){
+        $user = User::find($id);
+        if ($user){
+            $status = User::destroy($user->id);
+            if (!$status){
+                $response = [
+                    'status' => 'error'
+                ];
+            }else{
+                $response = [
+                    'status' => 'success'
+                ];
+            }
+        }else{
+            $response = [
+                'status' => 'no_data'
+            ];
+        }
+        return $response;
     }
 
     public function validation($request, $id = 0){
