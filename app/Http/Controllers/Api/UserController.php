@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserCollection;
 
 class UserController extends Controller
 {
@@ -24,20 +25,14 @@ class UserController extends Controller
         if (!empty($where)){
             $user = $user->where($where);
         }
-        $user = $user->get();
-        $user = UserResource::collection($user);
+        $user = $user->paginate();
         if ($user->count()> 0){
-            $response = [
-                'status' => 'success',
-                'data' => $user
-            ];
+            $status = 'success';
         }else{
-            $response = [
-                'status' => 'no_data',
-            ];
+            $status = 'no_data';
         }
-
-        return $response;
+        $user = new UserCollection($user, $status);
+        return $user;
     }
 
     public function detail($id){
