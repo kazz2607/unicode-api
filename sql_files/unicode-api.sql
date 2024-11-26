@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 25, 2024 at 10:35 PM
+-- Generation Time: Nov 26, 2024 at 10:36 AM
 -- Server version: 5.7.39
 -- PHP Version: 7.4.33
 
@@ -98,10 +98,10 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -112,7 +112,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Nguyễn Tuấn', 'kairu2607@gmail.com', NULL, '$2y$12$ftGEVAhdaV2px15jxDRYq.Q3IHQ3Ja7DfYxzzXOH8X/HmWn2ClsXa', NULL, '2024-11-25 08:03:11', '2024-11-25 08:03:11'),
+(1, 'Nguyễn Tuấn', 'kairu2607@gmail.com', NULL, NULL, NULL, '2024-11-25 08:03:11', '2024-11-25 20:21:29'),
 (2, 'Hoàng Nam', 'hoangnam@gmail.com', NULL, '$2y$12$ftGEVAhdaV2px15jxDRYq.Q3IHQ3Ja7DfYxzzXOH8X/HmWn2ClsXa', NULL, '2024-11-25 08:03:11', '2024-11-25 08:03:11'),
 (3, 'Hoàng Hương', 'hoanghuong@gmail.com', NULL, '$2y$12$ftGEVAhdaV2px15jxDRYq.Q3IHQ3Ja7DfYxzzXOH8X/HmWn2ClsXa', NULL, '2024-11-25 08:03:11', '2024-11-25 08:03:11');
 

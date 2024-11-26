@@ -53,21 +53,7 @@ class UserController extends Controller
     }
 
     public function create(Request $request){
-        $rules = [
-            'name' => 'required|min:5',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
-        ];
-        $messages = [
-            'name.required' => 'Họ tên buộc phải nhập',
-            'name.min' => 'Họ tên không nhỏ hơn :min ký tự',
-            'email.required' => 'Email buộc phải nhập',
-            'email.email' => 'Email không đúng định dạng',
-            'email.unique' => 'Email này đã tồn tại',
-            'password.required' => 'Mật khẩu buộc phải nhập',
-            'password.min' => 'Mật khẩu không nhỏ hơn :min ký tự'
-        ]; 
-        $request->validate($rules, $messages);
+        $this->validation($request);
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -86,12 +72,74 @@ class UserController extends Controller
         return $response;
     }
 
-    public function update(Request $request,User $user){
-        echo $request->method();
-        return $request->all();
+    public function update(Request $request,$id){
+        $user = User::find($id);
+        if (!$user){
+            $response = [
+                'status' => 'no_data'
+            ];
+        }else{
+            $this->validation($request, $id);
+            $method = $request->method();
+            if($method == 'PUT'){
+                // $userRequest = $request->all();
+                $user->name = $request->name;
+                $user->email = $request->email;
+                if (!empty($request->password)){
+                    $user->password = Hash::make($request->password);
+                }else{
+                    $user->password = null;
+                }
+                $user->save();
+                $response = [
+                    'status' => 'success',
+                    'data' => $user
+                ];
+            }else{
+                if ($request->name){
+                    $user->name = $request->name;
+                }
+                if ($request->email){
+                    $user->email = $request->email;
+                }
+                if (!empty($request->password)){
+                    $user->password = Hash::make($request->password);
+                }else{
+                    $user->password = null;
+                }
+                $user->save();
+                $response = [
+                    'status' => 'success',
+                    'data' => $user
+                ];
+            };
+        }
+        return $response;
     }
 
     public function delete(User $user){
         return 'Delete User ID :'.$user->id;
+    }
+
+    public function validation($request, $id = 0){
+        $emailValidation = 'required|email|unique:users';
+        if (!empty($id)){
+            $emailValidation.= ',email,'.$id;
+        }
+        $rules = [
+            'name' => 'required|min:5',
+            'email' => $emailValidation,
+            'password' => 'required|min:8'
+        ];
+        $messages = [
+            'name.required' => 'Họ tên buộc phải nhập',
+            'name.min' => 'Họ tên không nhỏ hơn :min ký tự',
+            'email.required' => 'Email buộc phải nhập',
+            'email.email' => 'Email không đúng định dạng',
+            'email.unique' => 'Email này đã tồn tại',
+            'password.required' => 'Mật khẩu buộc phải nhập',
+            'password.min' => 'Mật khẩu không nhỏ hơn :min ký tự'
+        ]; 
+        $request->validate($rules, $messages);
     }
 }
