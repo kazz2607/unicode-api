@@ -27,24 +27,29 @@ class UserController extends Controller
         }
         $user = $user->with('post')->paginate();
         if ($user->count()> 0){
-            $status = 'success';
+            $statusCode = 200;
+            $statusText = 'success';
         }else{
-            $status = 'no_data';
+            $statusCode = 204;
+            $statusText = 'no_data';
         }
-        $user = new UserCollection($user, $status);
+        $user = new UserCollection($user, $statusText, $statusCode);
         return $user;
     }
 
     public function detail($id){
         $user = User::with('post')->find($id);
         if (!$user){
-            $status = 'no_data';
+            $statusCode = 404;
+            $statusText = 'Not Found';
         }else{
-            $status = 'success';
+            $statusCode = 200;
+            $statusText = 'success';
+            $user = new UserResource($user);
         }
-        $user = new UserResource($user);
         $response = [
-            'status' => $status,
+            'status' => $statusCode,
+            'title' => $statusText,
             'data' => $user
         ];
         return $response;
@@ -59,12 +64,14 @@ class UserController extends Controller
         $user->save();
         if ($user->id){
             $response = [
-                'status' => 'success',
+                'status' => 200,
+                'title' => 'success',
                 'data' => $user
             ];
         }else{
             $response = [
-                'status' => 'error'
+                'status' => 500,
+                'title' => 'Server Error',
             ];
         }
         return $response;
@@ -90,7 +97,8 @@ class UserController extends Controller
                 }
                 $user->save();
                 $response = [
-                    'status' => 'success',
+                    'status' => 200,
+                    'title' => 'success',
                     'data' => $user
                 ];
             }else{
@@ -107,7 +115,8 @@ class UserController extends Controller
                 }
                 $user->save();
                 $response = [
-                    'status' => 'success',
+                    'status' => 200,
+                    'title' => 'success',
                     'data' => $user
                 ];
             };
@@ -121,11 +130,13 @@ class UserController extends Controller
             $status = User::destroy($user->id);
             if (!$status){
                 $response = [
-                    'status' => 'error'
+                    'status' => 500,
+                    'title' => 'Server Error',
                 ];
             }else{
                 $response = [
-                    'status' => 'success'
+                    'status' => 200,
+                    'title' => 'success',
                 ];
             }
         }else{
