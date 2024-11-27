@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Http\Resources\UserResource;
 
+
 class UserCollection extends ResourceCollection
 {
     private $statusText;

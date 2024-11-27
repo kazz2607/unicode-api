@@ -25,7 +25,7 @@ class UserController extends Controller
         if (!empty($where)){
             $user = $user->where($where);
         }
-        $user = $user->paginate();
+        $user = $user->with('post')->paginate();
         if ($user->count()> 0){
             $status = 'success';
         }else{
@@ -36,7 +36,7 @@ class UserController extends Controller
     }
 
     public function detail($id){
-        $user = User::find($id);
+        $user = User::with('post')->find($id);
         if (!$user){
             $status = 'no_data';
         }else{
