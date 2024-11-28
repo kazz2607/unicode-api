@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductsController;
 use App\Http\Controllers\Api\AuthController;
-
+use App\Models\User;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,3 +36,25 @@ Route::apiResource('products', ProductsController::class);
 Route::post('login', [AuthController::class,'login'])->name('login');
 Route::get('token', [AuthController::class,'getToken'])->middleware('auth:sanctum')->name('token');
 Route::post('refresh-token', [AuthController::class,'refreshToken'])->name('refresh-token');
+
+Route::get('passport-token',function(){
+    $user = User::find(1);
+    $tokenResult = $user->createToken('auth_api');
+
+    /** Thiết lập expires */
+    $token = $tokenResult->token;
+    $token->expires_at = Carbon::now()->addMinutes(60);
+
+    /** Trả về Access Token */
+    $accessToken = $tokenResult->accessToken;
+
+    /** Lấy về expires*/
+    $expires = Carbon::parse($token->expires_at)->toDateTimeString();
+
+    $response = [
+        'access_token' => $accessToken,
+        'expires' => $expires,
+    ];
+    
+    return $response;
+});
