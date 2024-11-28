@@ -20,10 +20,23 @@ class AuthController extends Controller
         ]);
         if ($checkLogin){
             $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            
+            // $token = $user->createToken('auth_token')->plainTextToken;
+            $tokenResult = $user->createToken('auth_api');
+            
+            /** Thiết lập expires */
+            $token = $tokenResult->token;
+            $token->expires_at = Carbon::now()->addMinutes(60);
+            
+            /** Trả về Access Token */
+            $accessToken = $tokenResult->accessToken;
+
+            /** Lấy về expires*/
+            $expires = Carbon::parse($token->expires_at)->toDateTimeString();
             $response = [
                 'status' => 200,
-                'token' =>  $token
+                'token' =>  $accessToken,
+                'expires' => $expires,
             ];
         }else{
             $response = [
@@ -31,6 +44,16 @@ class AuthController extends Controller
                 'title' => 'Unauthorized',
             ];
         }
+        return $response;
+    }
+
+    public function logout(){
+        $user = Auth::user();
+        $status = $user->token()->revoke();
+        $response = [
+            'status' => 200,
+            'title' => 'Logout',
+        ];
         return $response;
     }
 

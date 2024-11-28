@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('users')->name('users.')->middleware('auth:sanctum')->group(function(){
+Route::prefix('users')->name('users.')->middleware('auth:api')->group(function(){
     Route::get('/',[UserController::class,'index'])->name('index');
     Route::get('/{user}',[UserController::class,'detail'])->name('detail');
     Route::post('/',[UserController::class,'create'])->name('create');
@@ -34,6 +34,7 @@ Route::prefix('users')->name('users.')->middleware('auth:sanctum')->group(functi
 Route::apiResource('products', ProductsController::class);
 
 Route::post('login', [AuthController::class,'login'])->name('login');
+Route::post('logout', [AuthController::class,'logout'])->middleware('auth:api')->name('logout');
 Route::get('token', [AuthController::class,'getToken'])->middleware('auth:sanctum')->name('token');
 Route::post('refresh-token', [AuthController::class,'refreshToken'])->name('refresh-token');
 
@@ -55,6 +56,6 @@ Route::get('passport-token',function(){
         'access_token' => $accessToken,
         'expires' => $expires,
     ];
-    
+
     return $response;
 });
