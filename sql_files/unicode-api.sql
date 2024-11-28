@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:8889
--- Thời gian đã tạo: Th10 27, 2024 lúc 03:33 PM
+-- Thời gian đã tạo: Th10 28, 2024 lúc 04:35 PM
 -- Phiên bản máy phục vụ: 5.7.39
 -- Phiên bản PHP: 7.4.33
 
@@ -58,7 +58,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2024_11_27_072804_create_posts_table', 1);
+(5, '2024_11_27_072804_create_posts_table', 1),
+(6, '2024_11_27_073528_add_foreign_posts_table', 2);
 
 -- --------------------------------------------------------
 
@@ -90,6 +91,13 @@ CREATE TABLE `personal_access_tokens` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `personal_access_tokens`
+--
+
+INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
+(7, 'App\\Models\\User', 1, 'auth_token', '0a56acf6fe23391539536454cfe57711a66a2c4128e8e31dcbe97c98ea1bdbec', '[\"*\"]', NULL, NULL, '2024-11-28 02:31:38', '2024-11-28 02:31:38');
 
 -- --------------------------------------------------------
 
@@ -193,7 +201,7 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `posts_user_id_foreign` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `users`
@@ -216,13 +224,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `posts`
@@ -244,7 +252,8 @@ ALTER TABLE `users`
 -- Các ràng buộc cho bảng `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `posts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

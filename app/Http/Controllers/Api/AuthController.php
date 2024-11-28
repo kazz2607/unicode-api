@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Carbon\Carbon;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -44,5 +46,44 @@ class AuthController extends Controller
 
         /** Delete Token Current User */
         return $request->user()->currentAccessToken()->delete();
+    }
+
+    public function refreshToken(Request $request){
+        if ($request->header('authorization')){
+            $hashToken = $request->header('authorization');
+            $hashToken = str_replace('Bearer','',$hashToken);
+            $hashToken = trim($hashToken);
+            $token = PersonalAccessToken::findToken($hashToken);
+            if ($token){
+                $tokenCreated = $token->created_at;
+                $expire = Carbon::parse($tokenCreated)->addMinutes(config('sanctum.expiration'));
+                if (Carbon::now() >= $expire){
+                    $userId = $token->tokenable_id;
+                    $user = User::find($userId);
+                    $user->tokens()->delete();
+                    $newToken = $user->createToken('auth_token')->plainTextToken;
+                    $response = [
+                        'status' => 200,
+                        'token' =>  $newToken
+                    ];
+                }else{
+                    $response = [
+                        'status' => 200,
+                        'title' => 'Unexpired',
+                    ];
+                }
+            }else{
+                $response = [
+                    'status' => 401,
+                    'title' => 'Unauthorized',
+                ];
+            }
+        }else{
+            $response = [
+                'status' => 401,
+                'title' => 'Unauthorized',
+            ];
+        }
+        return $response;
     }
 }

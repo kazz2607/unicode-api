@@ -34,3 +34,4 @@ Route::apiResource('products', ProductsController::class);
 
 Route::post('login', [AuthController::class,'login'])->name('login');
 Route::get('token', [AuthController::class,'getToken'])->middleware('auth:sanctum')->name('token');
+Route::post('refresh-token', [AuthController::class,'refreshToken'])->name('refresh-token');
