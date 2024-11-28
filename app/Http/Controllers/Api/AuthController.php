@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -29,5 +30,19 @@ class AuthController extends Controller
             ];
         }
         return $response;
+    }
+
+    public function getToken(Request $request){
+        // $user = User::find(1);
+        // dd($user);
+
+        /** Delete Token All */
+        // $user->tokens()->delete();
+
+        /** Delete Token by ID User */
+        // $user->tokens()->where('id', 1)->delete();
+
+        /** Delete Token Current User */
+        return $request->user()->currentAccessToken()->delete();
     }
 }
