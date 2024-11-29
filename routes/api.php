@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Models\User;
 use Carbon\Carbon;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

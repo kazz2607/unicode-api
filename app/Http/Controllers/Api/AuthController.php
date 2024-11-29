@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Http;
+use Laravel\Passport\Client;
 
 class AuthController extends Controller
 {
@@ -22,22 +24,41 @@ class AuthController extends Controller
             $user = Auth::user();
             
             // $token = $user->createToken('auth_token')->plainTextToken;
-            $tokenResult = $user->createToken('auth_api');
+            // $tokenResult = $user->createToken('auth_api');
             
-            /** Thiết lập expires */
-            $token = $tokenResult->token;
-            $token->expires_at = Carbon::now()->addMinutes(60);
+            // /** Thiết lập expires */
+            // $token = $tokenResult->token;
+            // $token->expires_at = Carbon::now()->addMinutes(60);
             
-            /** Trả về Access Token */
-            $accessToken = $tokenResult->accessToken;
+            // /** Trả về Access Token */
+            // $accessToken = $tokenResult->accessToken;
 
-            /** Lấy về expires*/
-            $expires = Carbon::parse($token->expires_at)->toDateTimeString();
-            $response = [
-                'status' => 200,
-                'token' =>  $accessToken,
-                'expires' => $expires,
-            ];
+            // /** Lấy về expires*/
+            // $expires = Carbon::parse($token->expires_at)->toDateTimeString();
+
+            $client = Client::where('password_client',1)->first();
+            if ($client){
+                $clientSecret = $client->secret;
+                $clientId = $client->id;
+
+                $response = Http::asForm()->post('http://127.0.0.1:8001/oauth/token', [
+                    'grant_type' => 'password',
+                    'client_id' => $clientId,
+                    'client_secret' => $clientSecret,
+                    'username' => $request->email,
+                    'password' => $request->password,
+                    'scope' => '',
+                ]);
+                
+                return $response;
+            }
+
+            // $response = [
+            //     'status' => 200,
+            //     'token' =>  $accessToken,
+            //     'expires' => $expires,
+            // ];
+
         }else{
             $response = [
                 'status' => 401,
