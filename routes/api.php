@@ -39,6 +39,8 @@ Route::post('logout', [AuthController::class,'logout'])->middleware('auth:api')-
 Route::get('token', [AuthController::class,'getToken'])->middleware('auth:sanctum')->name('token');
 Route::post('refresh-token', [AuthController::class,'refreshToken'])->name('refresh-token');
 
+Route::post('refresh-token-passport', [AuthController::class,'refreshTokenPassport'])->name('refresh-token-passport');
+
 Route::get('passport-token',function(){
     $user = User::find(1);
     $tokenResult = $user->createToken('auth_api');
