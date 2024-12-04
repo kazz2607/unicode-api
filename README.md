@@ -12,4 +12,4 @@ Ngoài ra, học viên được rèn luyện tư duy khi làm việc với Frame
 
 Khoá học này không chia sẻ tất cả mọi thứ về Laravel nhưng sẽ trang bị cho học viên những kiến thức quan trọng, cần thiết khi đi làm cần sử dụng tới
 
-Khóa học này đang hướng dẫn ở phiên bản Laravel 8.x, 9.x, 10.x, 11.x# unicode-api
+Khóa học này đang hướng dẫn ở phiên bản Laravel 8.x, 9.x, 10.x, 11.x
